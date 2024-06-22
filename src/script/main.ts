@@ -1,4 +1,4 @@
-import { Plugin, MarkdownView, TFile } from "obsidian";
+import { Plugin } from "obsidian";
 
 import TagParsers from "./TagParsers";
 import TimelineElement from "./TimelineElement";
@@ -22,27 +22,33 @@ const toClassArray = (input: string): string[] => {
 export default class TimelinePlugin extends Plugin {
 	onload = async () => {
 		TagParsers.forEach(({ tag, parser }) => {
-			this.registerMarkdownCodeBlockProcessor(tag, (source, root, ctx) => {
-				const timelineElement = new TimelineElement(root, ctx.sourcePath);
-				const el = timelineElement.getElement();
-				
-				el.addClass("timeline");
-				const classMatch = source.match(classRegex);
-				if (classMatch !== null) {
-					const classes = toClassArray(classMatch[0]);
-					el.addClasses(classes);
-				}
+			this.registerMarkdownCodeBlockProcessor(
+				tag,
+				(source, root, ctx) => {
+					const timelineElement = new TimelineElement(
+						root,
+						ctx.sourcePath
+					);
 
-				const events = parser(source);
-				events.forEach(e => timelineElement.addEvent(e));
-			});
+					const el = timelineElement.getElement();
+					el.addClass("timeline");
+
+					const classMatch = source.match(classRegex);
+					if (classMatch !== null) {
+						const classes = toClassArray(classMatch[0]);
+						el.addClasses(classes);
+					}
+
+					const events = parser(source);
+					events.forEach((e) => timelineElement.addEvent(e));
+				}
+			);
 		});
 
 		console.log("timeline load");
 	};
 
-
 	onunload = async () => {
 		console.log("timeline onunload");
-	}
+	};
 }

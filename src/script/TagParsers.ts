@@ -10,8 +10,8 @@ const timelineLabeledParser = (source: string): TimelineEventInfo[] => {
 		parsed.push({
 			time: sourceMatch[1],
 			title: sourceMatch[2],
-			description: sourceMatch[3]
-		})
+			description: sourceMatch[3],
+		});
 	}
 
 	return parsed;
@@ -27,15 +27,15 @@ const timelineParser = (source: string): TimelineEventInfo[] => {
 	for (let i = 0; i < counter; i += 3) {
 		parsed.push({
 			time: sourceSplitted[i],
-			title: sourceSplitted[i+1],
-			description: sourceSplitted[i+2]
-		})
+			title: sourceSplitted[i + 1],
+			description: sourceSplitted[i + 2],
+		});
 	}
 
 	return parsed;
 };
 
-const toExport:TagParser[] = [
+const toExport: TagParser[] = [
 	{ tag: "timeline", parser: timelineParser },
 	{ tag: "timeline-labeled", parser: timelineLabeledParser },
 ];
